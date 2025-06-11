@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/focuscharts/static/css/main.e6c13ad2.css",
+    "main.js": "/focuscharts/static/js/main.b52b6d25.js",
+    "static/js/453.8ab44547.chunk.js": "/focuscharts/static/js/453.8ab44547.chunk.js",
+    "index.html": "/focuscharts/index.html",
+    "main.e6c13ad2.css.map": "/focuscharts/static/css/main.e6c13ad2.css.map",
+    "main.b52b6d25.js.map": "/focuscharts/static/js/main.b52b6d25.js.map",
+    "453.8ab44547.chunk.js.map": "/focuscharts/static/js/453.8ab44547.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.b52b6d25.js"
+  ]
+}
