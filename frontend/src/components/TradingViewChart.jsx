@@ -1,54 +1,59 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart } from 'lightweight-charts';
-
-const chartData = [
-  { time: '2024-06-10', open: 100, high: 110, low: 95, close: 105 },
-  { time: '2024-06-11', open: 105, high: 115, low: 102, close: 112 },
-  { time: '2024-06-12', open: 112, high: 117, low: 108, close: 114 },
-  { time: '2024-06-13', open: 114, high: 120, low: 110, close: 118 },
-  { time: '2024-06-14', open: 118, high: 125, low: 116, close: 123 },
-];
 
 const TradingViewChart = () => {
-  const chartContainerRef = useRef();
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    const container = chartContainerRef.current;
-    if (!container) return;
+    if (!window.TradingView) {
+      console.error('TradingView script not loaded');
+      return;
+    }
 
-    const chart = createChart(container, {
-      width: container.clientWidth,
-      height: 400,
-      layout: { background: { color: '#181a20' }, textColor: '#d1d4dc' },
-      grid: { vertLines: { color: '#363c4e' }, horzLines: { color: '#363c4e' } },
-      priceScale: { borderColor: '#485c7b' },
-      timeScale: { borderColor: '#485c7b' },
+    const widget = new window.TradingView.widget({
+      container_id: containerRef.current?.id,
+      width: containerRef.current?.clientWidth || 800,
+      height: 500,
+      symbol: 'NASDAQ:NVDA',
+      interval: '60',
+      timezone: 'Etc/UTC',
+      theme: 'dark',
+      style: '1',
+      locale: 'en',
+      toolbar_bg: '#181a20',
+      allow_symbol_change: true,
+      details: true,
+      hotlist: true,
+      calendar: true,
+      studies: [
+        'MASimple@tv-basicstudies',
+        'EMAExp@tv-basicstudies',
+        'VWAP@tv-basicstudies',
+        'RSI@tv-basicstudies',
+      ],
     });
-
-    // Use addSeries API for candlesticks
-    const candleSeries = chart.addSeries('Candlestick', {
-      upColor: '#4caf50',
-      downColor: '#f44336',
-      borderVisible: false,
-      wickUpColor: '#4caf50',
-      wickDownColor: '#f44336',
-    });
-    candleSeries.setData(chartData);
-
-    // Responsive
-    const handleResize = () => chart.applyOptions({ width: container.clientWidth });
-    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      chart.remove();
+      // Safely clear the container on unmount
+      try {
+        if (containerRef.current) {
+          containerRef.current.innerHTML = '';
+        }
+      } catch (cleanupError) {
+        console.warn('Error cleaning up TradingView widget:', cleanupError);
+      }
     };
   }, []);
 
   return (
     <div
-      ref={chartContainerRef}
-      style={{ width: '100%', maxWidth: '800px', height: '400px', margin: '40px auto', borderRadius: 8, background: '#181a20' }}
+      id="tv_chart_container"
+      ref={containerRef}
+      style={{
+        width: '100%',
+        maxWidth: '900px',
+        height: '500px',
+        margin: '40px auto',
+      }}
     />
   );
 };

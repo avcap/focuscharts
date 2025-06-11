@@ -3,7 +3,7 @@ import TradingViewChart from './components/TradingViewChart';
 
 function App() {
   return (
-    <div className="App" style={{ background: '#181a20', minHeight: '100vh', color: '#fff' }}>
+    <div className="App">
       <h1>FocusCharts Prototype</h1>
       <TradingViewChart />
     </div>
